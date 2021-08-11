@@ -1,0 +1,47 @@
+steps:
+  - name: gcr.io/k8s-skaffold/pack
+    env:
+      - server
+    args:
+      - build
+      - 'us.gcr.io/scalling-models-stage-async/pdf-converter-golang:$COMMIT_SHA'
+      - '--builder=gcr.io/buildpacks/builder:v1'
+      - '--path=.'
+      - '--env=server'
+    id: Buildpack
+    entrypoint: pack
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - 'us.gcr.io/scalling-models-stage-async/pdf-converter-golang:$COMMIT_SHA'
+    id: Push
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    args:
+      - run
+      - services
+      - update
+      - pdf-converter-golang
+      - '--platform=managed'
+      - '--image=us.gcr.io/scalling-models-stage-async/pdf-converter-golang:$COMMIT_SHA'
+      - >-
+        --labels=managed-by=us.gcr.io/scalling-models-stage-async/pdf-converter-golang:$COMMIT_SHA',gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID,$_LABELS
+      - '--region=us-central1'
+      - '--quiet'
+    id: Deploy
+    entrypoint: gcloud
+images:
+  - 'us.gcr.io/scalling-models-stage-async/pdf-converter-golang:$COMMIT_SHA'
+options:
+  substitutionOption: ALLOW_LOOSE
+substitutions:
+  _GCR_HOSTNAME: us.gcr.io
+  _PLATFORM: managed
+  _SERVICE_NAME: pdf-converter-golang
+  _ENTRYPOINT: server
+  _LABELS: gcb-trigger-id=da0bef2e-690a-4267-9f5d-394a2a9dec11
+  _TRIGGER_ID: da0bef2e-690a-4267-9f5d-394a2a9dec11
+  _DEPLOY_REGION: us-central1
+tags:
+  - gcp-cloud-build-deploy-cloud-run
+  - gcp-cloud-build-deploy-cloud-run-managed
+  - pdf-converter-golang
