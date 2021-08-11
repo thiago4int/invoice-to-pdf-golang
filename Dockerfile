@@ -1,4 +1,4 @@
-FROM openjdk:18-jdk-slim-buster
+FROM openjdk:18-jdk-slim-buster as builder
 
 RUN apt-get update && apt-get -y install \
   libreoffice-common \ 
