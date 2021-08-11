@@ -1,17 +1,27 @@
 steps:
+  # Run tests and save to file
+  - name: golang
+    entrypoint: /bin/bash
+    args: 
+      - -c
+      - |
+        go get -u github.com/jstemmer/go-junit-report
+        2>&1 go test -timeout 1m -v ./... | tee sponge.log
+        /go/bin/go-junit-report -set-exit-code < sponge.log > ${SHORT_SHA}_test_log.xml
+
 # Docker Build
-  - name: 'gcr.io/cloud-builders/docker'
+  - name: golang
     args: ['build', '-t', 
-           'us-central1-docker.pkg.dev/scalling-models-stage-async/invoice-to-pdf/invoice-to-pdf-golang', "./server"]
+           'us-central1-docker.pkg.dev/scalling-models-stage-async/invoice-to-pdf/invoice-to-pdf-golang:$SHORT_SHA', "."]
 
   # Docker push to Google Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/scalling-models-stage-async/invoice-to-pdf/invoice-to-pdf-golang']
+    args: ['push', 'us-central1-docker.pkg.dev/scalling-models-stage-async/invoice-to-pdf/invoice-to-pdf-golang:$SHORT_SHA']
 
   # Deploy to Cloud Run
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['run', 'deploy', 'server', 
-           '--image=us-central1-docker.pkg.dev/scalling-models-stage-async/invoice-to-pdf/invoice-to-pdf-golang', '--region', 'us-central1', '--platform', 'managed', '--set-env-vars', 'PDF_BUCKET=invoice-to-pdf-output']
+           '--image=us-central1-docker.pkg.dev/scalling-models-stage-async/invoice-to-pdf/invoice-to-pdf-golang:$SHORT_SHA', '--region', 'us-central1', '--platform', 'managed', '--set-env-vars', 'PDF_BUCKET=invoice-to-pdf-output']
 # Store images in Google Artifact Registry
 images:
-  - us-central1-docker.pkg.dev/scalling-models-stage-async/invoice-to-pdf/invoice-to-pdf-golang
+  - us-central1-docker.pkg.dev/scalling-models-stage-async/invoice-to-pdf/invoice-to-pdf-golang:$SHORT_SHA
