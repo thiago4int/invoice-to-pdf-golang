@@ -2,12 +2,13 @@ steps:
   # Run tests and save to file
   - name: golang
     entrypoint: go
-    args: args: ["build", "-0", "server"]
+    args: args: ['build', '-o', 
+           'us-central1-docker.pkg.dev/scalling-models-stage-async/invoice-to-pdf/invoice-to-pdf-golang', 'server']
 
 # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 
-           'us-central1-docker.pkg.dev/scalling-models-stage-async/invoice-to-pdf/invoice-to-pdf-golang', "server"]
+           'us-central1-docker.pkg.dev/scalling-models-stage-async/invoice-to-pdf/invoice-to-pdf-golang', 'server']
 
   # Docker push to Google Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
