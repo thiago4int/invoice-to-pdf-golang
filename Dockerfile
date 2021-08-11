@@ -6,7 +6,7 @@ RUN apt-get update && apt-get -y install \
   hyphen-af hyphen-en-us \
   fonts-dejavu fonts-dejavu-core fonts-dejavu-extra \
   fonts-droid-fallback fonts-dustin fonts-f500 fonts-fanwood fonts-freefont-ttf fonts-liberation \
-  fonts-lmodern fonts-lyx fonts-sil-gentium fonts-texgyre fonts-tlwg-purisa fonts-opensymbol clean && \
+  fonts-lmodern fonts-lyx fonts-sil-gentium fonts-texgyre fonts-tlwg-purisa fonts-opensymbol && \
   rm -rf /var/lib/apt/lists/*
 
 FROM scratch
