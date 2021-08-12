@@ -1,8 +1,16 @@
 .
 
-gsutil notification create -t new-doc -f json -e OBJECT_FINALIZE gs://invoice-to-pdf-output
+https://cloud.google.com/storage/docs/pubsub-notifications
 
+
+```
+gsutil notification create -t new-doc -f json -e OBJECT_FINALIZE gs://invoice-to-pdf-output
+```
+https://cloud.google.com/run/docs/quickstarts/prebuilt-deploy
+
+```
 gcloud iam service-accounts create pubsub-cloud-run-invoker --display-name "PubSub Cloud Run Invoker"
+```
 
 PROJECT_NUMBER=$(gcloud projects list \
  --format="value(PROJECT_NUMBER)" \
