@@ -2,11 +2,11 @@ steps:
 # Docker Build
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 
-           'us-central1-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/invoice-to-pdf-golang', '.']
+           'us-central1-docker.pkg.dev/scalling-models-stage-async/invoice-to-pdf/invoice-to-pdf-golang', '.']
 
   # Docker push to Google Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'us-central1-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/invoice-to-pdf-golang']  
+    args: ['push', 'us-central1-docker.pkg.dev/scalling-models-stage-async/invoice-to-pdf/invoice-to-pdf-golang']  
       
 images:
-  - us-central1-docker.pkg.dev/$PROJECT_ID/$_REPO_NAME/invoice-to-pdf-golang
+  - us-central1-docker.pkg.dev/scalling-models-stage-async/invoice-to-pdf/invoice-to-pdf-golang
