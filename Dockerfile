@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/base-debian10
+FROM debian:buster
 RUN apt-get update -y \
   && apt-get install -y libreoffice \
   && apt-get clean
